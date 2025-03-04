@@ -1,9 +1,10 @@
 import './App.css';
+import LeftSideIllustrator from './components/LeftSideIllustrator';
 
 function App() {
   return (
-    <div className='App'>
-      <h1>Easy Split</h1>
+    <div>
+      <LeftSideIllustrator />
     </div>
   );
 }
