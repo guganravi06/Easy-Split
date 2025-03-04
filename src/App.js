@@ -1,10 +1,16 @@
 import './App.css';
-import LeftSideIllustrator from './components/LeftSideIllustrator';
+import InputField from './components/InputField';
+// import LeftSideIllustrator from './components/LeftSideIllustrator';
 
 function App() {
   return (
     <div>
-      <LeftSideIllustrator />
+      {/* <LeftSideIllustrator /> */}
+      <InputField 
+        label="name"
+        type="password"
+        placeholder="Password"  
+      />
     </div>
   );
 }
