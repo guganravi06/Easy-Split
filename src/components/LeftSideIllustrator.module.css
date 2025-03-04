@@ -1,0 +1,43 @@
+.container{
+    width: 50vw;
+    height: 100vh;
+    background-color: #4D8A77;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    margin: 5px 0px 0px 5px;
+    border-radius: 5px;
+    text-align: center;
+    position: relative;
+}
+
+.header{
+    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+.quote{
+    color: #EDEF7C;
+    margin-bottom: 20px;
+}
+
+.circle{
+    width: 302px;
+    height: 302px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #487164;
+}
+
+.logo{
+    width: auto;
+    height: auto;
+    object-fit: cover;
+}
