@@ -3,7 +3,7 @@ import SignUp from './pages/SignUp';
 
 function App() {
   return (
-    <div style={{display:'flex'}}>
+    <div>
       <SignUp />
     </div>
   );
