@@ -1,0 +1,58 @@
+.button {
+    display: grid;
+    grid-template-columns: auto 1fr auto; /* Image | Text | Image */
+    align-items: center;
+    padding: 5px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+    background-color: #4D8A77;
+    color: white;
+    width: 150px; /* Adjust width as needed */
+    height: 30px;
+  }
+  
+  /* Icon Styling */
+  img {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+    border-radius: 100%;
+  }
+  
+  /* Image Positions */
+  .left {
+    grid-column: 1; /* Image in first column */
+  }
+  
+  .center {
+    grid-column: 2; /* Image in center column */
+    justify-self: center;
+  }
+  
+  .right {
+    grid-column: 3; /* Image in last column */
+  }
+  
+  /* Text Alignment */
+  span {
+    grid-column: 2; 
+    text-align: center;
+    align-self: center;
+  }
+  
+  .left span {
+    text-align: left;
+  }
+  
+  .center span {
+    text-align: center;
+  }
+  
+  .right span {
+    text-align: right;
+  }
+  
