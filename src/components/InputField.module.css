@@ -1,5 +1,6 @@
 .inputContainer{
-    margin-bottom: 16px;
+    margin-top: 30px;
+    width: 100%;
 }
 
 .label{
@@ -21,9 +22,10 @@
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
     outline: none;
+    color: #797681;
 }
 
 .input:focus{
