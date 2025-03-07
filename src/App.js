@@ -1,16 +1,17 @@
 import './App.css';
-import LoginContainer from './components/LoginContainer';
 import TopBar from './components/TopBar';
 import HomePage from './pages/HomePage';
 import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
 
 function App() {
   return (
     <div>
       {/* <SignUp /> */}
-      <HomePage />
+      {/* <HomePage /> */}
+      <SignIn />
     </div>
   );
 }
 
-export default App; 
+export default App;
