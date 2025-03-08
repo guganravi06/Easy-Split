@@ -82,3 +82,9 @@
   font-size: 13px;
   color: #666;
 }
+
+.linkText {
+  color: #4D8A77;
+  cursor: pointer;
+  font-weight: 500;
+}
