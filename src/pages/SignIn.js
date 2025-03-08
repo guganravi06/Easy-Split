@@ -30,7 +30,7 @@ const SignIn = () => {
           />
         </div>
         <div className={styles.signUpMessage}>
-          Don't have an account? <a href='sign-up'>Sign up</a>
+          Don't have an account? <span className={styles.linkText}>Sign up</span>
         </div>
       </div>
     </div>
