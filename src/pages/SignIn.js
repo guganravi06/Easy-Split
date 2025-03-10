@@ -72,7 +72,7 @@ const SignIn = () => {
           </div>
           <Button
             text='Sign In With Google'
-            icon='./assets/google-logo-icon.png'
+            image='./assets/google-logo-icon.png'
             textAlign='center'
             onClick={handleSignInWithGoogle}
           />
