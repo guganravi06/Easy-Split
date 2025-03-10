@@ -3,16 +3,22 @@ import TopBar from './components/TopBar';
 import HomePage from './pages/HomePage';
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
-import { app } from './fireBase';
+import { AuthProvider } from './contexts/AuthContext';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
-  console.log(app);
   return (
-    <div>
-      {/* <SignUp /> */}
-      {/* <HomePage /> */}
-      <SignIn />
-    </div>
+    <BrowserRouter>
+      <div>
+        <AuthProvider>
+          <Routes>
+            <Route path='/' element={<SignIn />} />
+            <Route path='/home' element={<HomePage />} />
+            <Route path='/signup' element={<SignUp />} />
+          </Routes>
+        </AuthProvider>
+      </div>
+    </BrowserRouter>
   );
 }
 
