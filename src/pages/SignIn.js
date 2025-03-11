@@ -8,34 +8,35 @@ import { useState } from 'react';
 
 const SignIn = () => {
   const navigate = useNavigate();
-
   const { login, signInWithGoogle } = useAuth();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [invalidCredErrMessage, setInvalidCredErrMessage] = useState('');
 
   // console.log('currentUser:', auth?.currentUser?.email);
-
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
+    setInvalidCredErrMessage('');
     if (!email || !password) {
       console.error('Email or password is empty.');
+      setErrorMessage('Please enter email and password');
       return;
     }
-
     try {
       await login(email, password);
-      navigate('./home');
+      navigate('/home');
     } catch (error) {
       console.error(error);
+      setInvalidCredErrMessage('Invalid credentials');
     }
   };
   const handleSignInWithGoogle = async (e) => {
     e.preventDefault();
-
     try {
       await signInWithGoogle();
-      navigate('./home');
+      navigate('/home');
     } catch (error) {
       console.error(error);
     }
@@ -62,9 +63,19 @@ const SignIn = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-
+          {errorMessage && (
+            <p className={styles.errorMessage}>{errorMessage}</p>
+          )}
+          {invalidCredErrMessage && (
+            <p className={styles.errorMessage}>{invalidCredErrMessage}</p>
+          )}
           <p className={styles.forgotPassword}>
-            <span className={styles.linkText}>Forgot Password?</span>
+            <span
+              className={styles.linkText}
+              onClick={() => navigate('/forgot-password')}
+            >
+              Forgot Password?
+            </span>
           </p>
           <Button text='Sign In' textAlign='center' onClick={handleLogin} />
           <div className={styles.orContainer}>

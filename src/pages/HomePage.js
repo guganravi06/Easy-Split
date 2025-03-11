@@ -3,16 +3,17 @@ import TopBar from '../components/TopBar';
 import styles from './HomePage.module.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../fireBase';
 
 const HomePage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-
+  console.log('currentUser:', auth?.currentUser?.email);
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
       await logout();
-      navigate('/');
+      navigate('/signin');
       console.log('User logged out');
     } catch (error) {
       console.error(error);
