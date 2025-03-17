@@ -81,3 +81,12 @@
     cursor: pointer;
     font-weight: 500;
 }
+
+.errorMessage {
+    color: red;
+    margin-bottom: 8px;
+    text-align: left;
+    width: 100%; /* Ensures it spans the container width */
+    margin-top: 8px;
+    max-width: 425px;
+  }
