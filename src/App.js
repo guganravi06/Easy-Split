@@ -5,21 +5,33 @@ import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
 import ForgotPassword from './pages/ForgotPassword';
 import { AuthProvider } from './contexts/AuthContext';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './components/protectedRoute';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
-    <BrowserRouter>
       <AuthProvider>
+        <Router>
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/home' element={<HomePage />} />
-          <Route path='/signup' element={<SignUp />} />
-          <Route path='/signin' element={<SignIn />} />
-          <Route path='/forgot-password' element={<ForgotPassword />} />
+          {/* Public routes */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          
+          {/* Protected routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<HomePage />} />
+            {/* Add more protected routes here as you build your app */}
+            {/* For example: */}
+            {/* <Route path="/expenses" element={<ExpensesPage />} /> */}
+          </Route>
+          
+          {/* Redirect to sign in if route doesn't exist */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
+      </Router>
       </AuthProvider>
-    </BrowserRouter>
   );
 }
 

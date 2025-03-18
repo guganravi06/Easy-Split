@@ -4,15 +4,22 @@ import InputField from '../components/InputField';
 import Button from '../components/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { login, signInWithGoogle } = useAuth();
+  const { login, signInWithGoogle,user } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [invalidCredErrMessage, setInvalidCredErrMessage] = useState('');
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   // console.log('currentUser:', auth?.currentUser?.email);
   const handleLogin = async (e) => {

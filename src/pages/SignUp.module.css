@@ -21,7 +21,7 @@
 
 .signupCard{
     width: 550px;
-    height: 475px;
+    height: 650px;
     padding: 0px 25px ;
     background-color: #FFFFFF;
     border-radius: 10px;
@@ -81,3 +81,12 @@
     cursor: pointer;
     font-weight: 500;
 }
+
+.errorMessage {
+    color: red;
+    margin-bottom: 8px;
+    text-align: left;
+    width: 100%; /* Ensures it spans the container width */
+    margin-top: 8px;
+    max-width: 425px;
+  }

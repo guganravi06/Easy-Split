@@ -7,7 +7,7 @@ import { auth } from '../fireBase';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout,user } = useAuth();
   console.log('currentUser:', auth?.currentUser?.email);
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -20,9 +20,12 @@ const HomePage = () => {
     }
   };
 
+  const displayName = user?.displayName || 
+                     (user?.email ? user.email.split('@')[0] : 'User');
+
   return (
     <div className={styles.container}>
-      <TopBar username='Gugan' onLogout={handleLogout} />
+      <TopBar username={displayName} onLogout={handleLogout} />
 
       <div className={styles.content}>
         <div className={styles.welcomeCard}>
