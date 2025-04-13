@@ -4,7 +4,6 @@ import styles from './HomePage.module.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../fireBase';
-import StatCard from '../components/StatCard';
 import Dashboard from './Dashboard';
 
 const HomePage = () => {
