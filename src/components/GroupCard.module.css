@@ -1,0 +1,38 @@
+/* GroupCard.module.css */
+.groupCard {
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  
+  .title {
+    font-weight: bold;
+    font-size: 16px;
+    color: #1f2937;
+    margin-bottom: 4px;
+  }
+  
+  .members {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 8px;
+  }
+  
+  .balance {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 8px;
+  }
+  
+  .positiveBalance {
+    color: #10b981; /* Green color for positive balances */
+  }
+  
+  .negativeBalance {
+    color: #ef4444; /* Red color for negative balances */
+  }
+  
+  .status {
+    font-size: 14px;
+    color: #6b7280;
+  }
