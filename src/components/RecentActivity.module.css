@@ -1,0 +1,42 @@
+.container {
+    margin-bottom: 24px;
+  }
+  
+  .title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #e4e4e4;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .tableRow {
+    border-bottom: 1px solid #e4e4e4;
+  }
+  
+  .tableRow:last-child {
+    border-bottom: none;
+  }
+  
+  .tableCell {
+    padding: 16px;
+  }
+  
+  .description {
+    font-weight: 500;
+  }
+  
+  .group, .date {
+    color: #6b7280;
+  }
+  
+  .amount {
+    text-align: right;
+    font-weight: 500;
+  }

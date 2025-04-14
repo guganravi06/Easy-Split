@@ -4,6 +4,7 @@ import styles from './HomePage.module.css';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../fireBase';
+import Dashboard from './Dashboard';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const HomePage = () => {
             owes what, settle up, and make sure everyone pays their fair share.
           </p>
         </div>
-
+        <Dashboard />
         {/* You can add additional content or features here */}
       </div>
     </div>
