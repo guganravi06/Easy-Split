@@ -59,7 +59,7 @@ const SignIn = () => {
           <h2 className={styles.header}>Welcome Back</h2>
           <p className={styles.message}>Sign in to continue to EasySplit</p>
           <InputField
-            type='text'
+            type='email'
             placeholder='Email address'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
