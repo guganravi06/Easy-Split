@@ -7,6 +7,10 @@ import QuickActions from '../components/QuickAction';
 import OutstandingBalances from '../components/OutstandingBalances';
 
 const Dashboard = () => {
+
+  const handleAdd = ()=>{
+    alert("add expense clicked")
+  }
   const groupsData = [
     { name: 'Roommates', memberCount: 4, balance: 85.0, owed: true },
     { name: 'Trip to NYC', memberCount: 6, balance: 25.5, owed: false },
@@ -115,7 +119,7 @@ const Dashboard = () => {
           />
           <OutstandingBalances balances={balancesData} />
         </div>
-        <button className={styles.floatingAction}>+</button>
+        <button className={styles.floatingAction} onClick={handleAdd}>+</button>
       </div>
     </>
   );
