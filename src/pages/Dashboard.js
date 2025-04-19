@@ -68,17 +68,17 @@ const Dashboard = () => {
   ];
 
   const handleCreateGroup = () => {
-    console.log('Create group clicked');
+    alert('Create group clicked');
     // Add your implementation logic here
   };
 
   const handleAddExpense = () => {
-    console.log('Add expense clicked');
+    alert('Add expense clicked');
     // Add your implementation logic here
   };
 
   const handleSettleUp = () => {
-    console.log('Settle up clicked');
+    alert('Settle up clicked');
     // Add your implementation logic here
   };
 
@@ -115,6 +115,7 @@ const Dashboard = () => {
           />
           <OutstandingBalances balances={balancesData} />
         </div>
+        <button className={styles.floatingAction}>+</button>
       </div>
     </>
   );
