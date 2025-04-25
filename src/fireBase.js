@@ -2,6 +2,7 @@
 import { initializeApp } from 'firebase/app';
 // TODO: Add SDKs for Firebase products that you want to use
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 // const firebaseConfig = {
@@ -12,6 +13,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 //   messagingSenderId: '632005998830',
 //   appId: '1:632005998830:web:eb0c9e5eea01e2629e9bff',
 //   measurementId: 'G-BNZ173Q4LX',
+//Gauri's firebase
 // };
 
 const firebaseConfig = {
@@ -21,11 +23,13 @@ const firebaseConfig = {
   storageBucket: 'easy-split-2a48b.firebasestorage.app',
   messagingSenderId: '290465597940',
   appId: '1:290465597940:web:632149df79282f3c3c51a1',
+  //Gugan's
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+const db = getFirestore(app);
 
-export { app, auth, googleProvider };
+export { app, auth, googleProvider, db };

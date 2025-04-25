@@ -1,3 +1,5 @@
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../fireBase';
 import React, { useState } from 'react';
 import styles from './CreateGroupModal.module.css';
 import Button from './Button';
@@ -29,16 +31,28 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
     setMembers(members.filter((member) => member.id !== id));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (groupName.trim() && members.length > 0) {
-      onCreateGroup({
+      const newGroup = {
         name: groupName,
         memberCount: members.length,
         balance: 0,
         owed: false,
         members,
-      });
+        createdAt: new Date(),
+      };
+
+      try {
+        await addDoc(collection(db, 'groups'), newGroup); // sends data to 'groups' collection
+        onCreateGroup(newGroup); // for local UI updates
+        onClose();
+        alert(`${groupName} Group Added!`);
+      } catch (error) {
+        console.error('Error adding group to Firebase:', error);
+        alert('Failed to create group. Please try again.');
+      }
     }
   };
 
