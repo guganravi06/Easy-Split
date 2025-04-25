@@ -114,6 +114,7 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
                 text=' + Add Member'
                 onClick={handleAddMember}
                 className={styles.addMemberButton}
+                type='button'
               />
             </div>
           </div>
@@ -124,7 +125,11 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
               onClick={onClose}
               className={styles.cancelButton}
             />
-            <Button text=' Create Group' className={styles.createButton} />
+            <Button
+              text=' Create Group'
+              className={styles.createButton}
+              type='submit'
+            />
           </div>
         </form>
       </div>
