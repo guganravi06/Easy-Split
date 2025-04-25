@@ -1,21 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Dashboard.module.css';
 import StatCard from '../components/StatCard';
 import Groups from '../components/Groups';
 import RecentActivity from '../components/RecentActivity';
 import QuickActions from '../components/QuickAction';
 import OutstandingBalances from '../components/OutstandingBalances';
+import CreateGroupModal from '../components/CreateGroupModal';
 
 const Dashboard = () => {
-
-  const handleAdd = ()=>{
-    alert("add expense clicked")
-  }
-  const groupsData = [
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [groupsData, setGroupsData] = useState([
     { name: 'Roommates', memberCount: 4, balance: 85.0, owed: true },
     { name: 'Trip to NYC', memberCount: 6, balance: 25.5, owed: false },
     { name: 'Dinner Club', memberCount: 3, balance: 65.0, owed: true },
-  ];
+  ]);
 
   const transactionsData = [
     {
@@ -71,9 +69,11 @@ const Dashboard = () => {
     },
   ];
 
-  const handleCreateGroup = () => {
-    alert('Create group clicked');
-    // Add your implementation logic here
+  const handleCreateGroup = (newGroup) => {
+    const { name: groupName } = newGroup;
+    setGroupsData([...groupsData, newGroup]);
+    setShowCreateGroupModal(false);
+    alert(`${groupName} Group Added!`);
   };
 
   const handleAddExpense = () => {
@@ -113,13 +113,18 @@ const Dashboard = () => {
 
         <div className={styles.sidebarContainer}>
           <QuickActions
-            onCreateGroup={handleCreateGroup}
+            onCreateGroup={() => setShowCreateGroupModal(true)}
             onAddExpense={handleAddExpense}
             onSettleUp={handleSettleUp}
           />
           <OutstandingBalances balances={balancesData} />
         </div>
-        <button className={styles.floatingAction} onClick={handleAdd}>+</button>
+        {showCreateGroupModal && (
+          <CreateGroupModal
+            onClose={() => setShowCreateGroupModal(false)}
+            onCreateGroup={handleCreateGroup}
+          />
+        )}
       </div>
     </>
   );
