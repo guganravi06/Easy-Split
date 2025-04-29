@@ -1,6 +1,6 @@
-.inputContainer{
-    margin-top: 30px;
-    width: 100%;
+.inputContainer {
+  margin-top: 30px;
+  width: 100%;
 }
 
 .label {
@@ -18,14 +18,14 @@
   border: #e1e5eb;
 }
 
-.input{
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 16px;
-    outline: none;
-    color: #797681;
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  color: #797681;
 }
 
 .input:focus {

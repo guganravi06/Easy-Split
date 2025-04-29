@@ -9,12 +9,14 @@ const Button = ({
   onClick,
   className = '',
   style = {},
+  type = 'button',
 }) => {
   return (
     <button
       className={`${styles.button} ${className}`}
       style={style}
       onClick={onClick}
+      type={type}
     >
       {image && imagePosition === 'left' && (
         <img
