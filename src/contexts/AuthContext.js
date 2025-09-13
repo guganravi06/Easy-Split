@@ -1,109 +1,129 @@
-import { browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, setPersistence, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import {auth,googleProvider} from '../fireBase'
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../fireBase"; 
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { auth, googleProvider } from "../fireBase";
 
 const AuthContext = createContext();
 
-export function useAuth(){
-    return useContext(AuthContext);
+export function useAuth() {
+  return useContext(AuthContext);
 }
 
-export const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(null);
-    const [error, setError] = useState("");
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState("");
 
-    async function signUp(email,password,displayName) {
-        try {
-            setError('');
-            const userCredentials = await createUserWithEmailAndPassword(auth,email,password);
+  async function signUp(email, password, displayName) {
+    try {
+      setError("");
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-            if(displayName){
-                await updateProfile(userCredentials.user,{displayName});
-            }
+      if (displayName) {
+        await updateProfile(userCredentials.user, { displayName });
+      }
 
-            return userCredentials.user;
-        } catch (error) {
-            setError(error.message);
-            throw error;
-        }
+      // Create user document in Firestore
+      await setDoc(doc(db, "users", userCredentials.user.uid), {
+        name: displayName || "",
+        email,
+        groups: [],
+      });
+
+      return userCredentials.user;
+    } catch (error) {
+      setError(error.message);
+      throw error;
     }
+  }
 
-    async function login(email,password,rememberMe = true) {
-        try {
-            setError('');
-            // Set persistence type based on "Remember Me" option
-            const persistenceType = rememberMe ? 
-            // LOCAL: Persists even when browser is closed (default)
-            browserLocalPersistence : 
-            // SESSION: Cleared when browser window is closed
-            browserSessionPersistence;
-    
-            await setPersistence(auth, persistenceType);
+  async function login(email, password, rememberMe = true) {
+    try {
+      setError("");
+      // Set persistence type based on "Remember Me" option
+      const persistenceType = rememberMe
+        ? // LOCAL: Persists even when browser is closed (default)
+          browserLocalPersistence
+        : // SESSION: Cleared when browser window is closed
+          browserSessionPersistence;
 
-            return await signInWithEmailAndPassword(auth, email, password);
-        } catch (err) {
-            setError(err.message);
-            throw err;
-        }
+      await setPersistence(auth, persistenceType);
+
+      return await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      setError(err.message);
+      throw err;
     }
+  }
 
-    async function logout() {
-        try {
-            setError('');
+  async function logout() {
+    try {
+      setError("");
 
-            return await signOut(auth); 
-        } catch (error) {
-            setError(error.message);
-            throw error;
-        }
+      return await signOut(auth);
+    } catch (error) {
+      setError(error.message);
+      throw error;
     }
+  }
 
-    async function signInWithGoogle(rememberMe = true) {
-        try {
-            setError('');
-            const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
-            await setPersistence(auth,persistenceType);
-            return await signInWithPopup(auth,googleProvider);
-        } catch (error) {
-            setError(error);
-            throw error;
-        }
+  async function signInWithGoogle(rememberMe = true) {
+    try {
+      setError("");
+      const persistenceType = rememberMe
+        ? browserLocalPersistence
+        : browserSessionPersistence;
+      await setPersistence(auth, persistenceType);
+      return await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      setError(error);
+      throw error;
     }
+  }
 
-    async function  resetPassword(email) {
-        try {
-            setError('');
+  async function resetPassword(email) {
+    try {
+      setError("");
 
-            return await sendPasswordResetEmail(auth,email);
-        } catch (error) {
-            setError(error);
-            throw error;
-        }
-        
+      return await sendPasswordResetEmail(auth, email);
+    } catch (error) {
+      setError(error);
+      throw error;
     }
+  }
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-          setUser(user);
-        });
-    
-        // Cleanup subscription on unmount
-        return unsubscribe;
-      }, []);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
 
-    const value = {
-        user,
-        error,
-        signUp,
-        login,
-        logout,
-        signInWithGoogle,
-        resetPassword
-    }
-  return (
-    <AuthContext.Provider value={value}>
-        {children}
-    </AuthContext.Provider>
-  )
-}
+    // Cleanup subscription on unmount
+    return unsubscribe;
+  }, []);
 
+  const value = {
+    user,
+    error,
+    signUp,
+    login,
+    logout,
+    signInWithGoogle,
+    resetPassword,
+  };
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

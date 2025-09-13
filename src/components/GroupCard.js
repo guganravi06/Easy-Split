@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './GroupCard.module.css'
 
-const GroupCard = ({name,memberCount,balance,owed}) => {
+const GroupCard = ({name,memberCount,balance=0,owed=false}) => {
     const balanceClass = owed 
     ? styles.positiveBalance 
     : styles.negativeBalance;

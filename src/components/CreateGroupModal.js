@@ -1,29 +1,72 @@
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../fireBase';
-import React, { useState } from 'react';
-import styles from './CreateGroupModal.module.css';
-import Button from './Button';
-import InputField from '../components/InputField';
+import {
+  collection,
+  addDoc,
+  Timestamp,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
+import { useAuth } from "../contexts/AuthContext";
+import { db } from "../fireBase";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { useState } from "react";
+import styles from "./CreateGroupModal.module.css";
+import Button from "./Button";
+import InputField from "../components/InputField";
 
 const CreateGroupModal = ({ onClose, onCreateGroup }) => {
-  const [groupName, setGroupName] = useState('');
+  const { user } = useAuth();
+  const [groupName, setGroupName] = useState("");
   const [members, setMembers] = useState([
-    { id: 1, name: 'Gauri Gulwane', email: 'gauri@example.com' },
-    { id: 2, name: 'Gugan', email: 'gugan@example.com' },
+    { id: user.uid, name: user.displayName || user.email, email: user.email },
   ]);
-  const [newMemberName, setNewMemberName] = useState('');
-  const [newMemberEmail, setNewMemberEmail] = useState('');
+  const [newMemberName, setNewMemberName] = useState("");
+  const [newMemberEmail, setNewMemberEmail] = useState("");
+  const [error, setError] = useState("");
 
-  const handleAddMember = () => {
-    if (newMemberName.trim()) {
+  const checkIfUserExists = async (email) => {
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty;
+  };
+
+  const handleAddMember = async () => {
+    setError(""); // Clear previous errors
+
+    if (!newMemberEmail.trim()) {
+      setError("Email is required");
+      return;
+    }
+
+    // Check if member is already in the group
+    if (members.some((member) => member.email === newMemberEmail)) {
+      setError("This user is already in the group");
+      return;
+    }
+
+    try {
+      const userExists = await checkIfUserExists(newMemberEmail);
+
+      if (!userExists) {
+        setError(
+          "This email is not registered. Please invite them to join Easy Split first."
+        );
+        return;
+      }
+
       const newMember = {
-        id: Date.now(),
-        name: newMemberName.trim(),
+        name: newMemberName.trim() || newMemberEmail, // Use email as name if no name provided
         email: newMemberEmail.trim(),
       };
+
       setMembers([...members, newMember]);
-      setNewMemberName('');
-      setNewMemberEmail('');
+      setNewMemberName("");
+      setNewMemberEmail("");
+      setError("");
+    } catch (error) {
+      setError("Error checking user. Please try again.");
+      console.error("Error checking user:", error);
     }
   };
 
@@ -37,21 +80,42 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
     if (groupName.trim() && members.length > 0) {
       const newGroup = {
         name: groupName,
-        memberCount: members.length,
-        balance: 0,
-        owed: false,
-        members,
-        createdAt: new Date(),
+        createdBy: user.uid, // Store user ID instead of name
+        createdByName: user.displayName || user.email, // Store name for display
+        members: members.map((m) => ({
+          name: m.name,
+          email: m.email,
+        })),
+        createdAt: Timestamp.now(),
       };
 
       try {
-        await addDoc(collection(db, 'groups'), newGroup); // sends data to 'groups' collection
-        onCreateGroup(newGroup); // for local UI updates
+        const groupRef = await addDoc(collection(db, "groups"), newGroup);
+        const groupId = groupRef.id;
+
+        // 2. Update all member users' groups arrays
+        const updatePromises = members.map(async (member) => {
+          // Query to find user document by email
+          const usersRef = collection(db, "users");
+          const q = query(usersRef, where("email", "==", member.email));
+          const querySnapshot = await getDocs(q);
+
+          if (!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];
+            await updateDoc(doc(db, "users", userDoc.id), {
+              groups: arrayUnion(groupId),
+            });
+          }
+        });
+
+        await Promise.all(updatePromises);
+
+        onCreateGroup({ ...newGroup, id: groupId });
         onClose();
         alert(`${groupName} Group Added!`);
       } catch (error) {
-        console.error('Error adding group to Firebase:', error);
-        alert('Failed to create group. Please try again.');
+        console.error("Error adding group to Firebase:", error);
+        alert("Failed to create group. Please try again.");
       }
     }
   };
@@ -62,19 +126,19 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
         <div className={styles.modalHeader}>
           <h2>Create Group</h2>
           <Button
-            text='×'
-            textAlign='right'
+            text="×"
+            textAlign="right"
             onClick={onClose}
             className={styles.closeButton}
           />
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className={styles.formGroup}>
             {/* <label htmlFor='groupName'>Group Name</label> */}
             <InputField
-              type='text'
-              placeholder='Enter group name'
+              type="text"
+              placeholder="Enter group name"
               value={groupName}
               onChange={(e) => setGroupName(e.target.value)}
               required
@@ -87,6 +151,8 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
               <span>{members.length} members</span>
             </div>
 
+            {error && <div className={styles.errorMessage}>{error}</div>}
+
             <div className={styles.membersList}>
               {members.map((member) => (
                 <div key={member.id} className={styles.memberItem}>
@@ -98,8 +164,8 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
                   </div>
                   {member.id !== 1 && (
                     <Button
-                      text='×'
-                      textAlign='right'
+                      text="×"
+                      textAlign="right"
                       onClick={() => handleRemoveMember(member.id)}
                       className={styles.removeMemberButton}
                     />
@@ -111,38 +177,39 @@ const CreateGroupModal = ({ onClose, onCreateGroup }) => {
             <div className={styles.addMemberForm}>
               <div className={styles.addMemberInputs}>
                 <InputField
-                  type='text'
-                  placeholder='Name'
+                  type="text"
+                  placeholder="Name"
                   value={newMemberName}
                   onChange={(e) => setNewMemberName(e.target.value)}
                 />
                 <InputField
-                  type='email'
-                  placeholder='Email (optional)'
+                  type="email"
+                  placeholder="Email"
                   value={newMemberEmail}
                   onChange={(e) => setNewMemberEmail(e.target.value)}
+                  required
                 />
               </div>
               <div className={styles.marginTopandbottom}></div>
               <Button
-                text=' + Add Member'
+                text=" + Add Member"
                 onClick={handleAddMember}
                 className={styles.addMemberButton}
-                type='button'
+                type="button"
               />
             </div>
           </div>
 
           <div className={styles.formActions}>
             <Button
-              text=' Cancel'
+              text=" Cancel"
               onClick={onClose}
               className={styles.cancelButton}
             />
             <Button
-              text=' Create Group'
+              text=" Create Group"
               className={styles.createButton}
-              type='submit'
+              type="submit"
             />
           </div>
         </form>

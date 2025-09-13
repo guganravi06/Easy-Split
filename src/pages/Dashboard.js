@@ -6,14 +6,12 @@ import RecentActivity from '../components/RecentActivity';
 import QuickActions from '../components/QuickAction';
 import OutstandingBalances from '../components/OutstandingBalances';
 import CreateGroupModal from '../components/CreateGroupModal';
+import AddExpenseModal from '../components/AddExpenseModal';
 
 const Dashboard = () => {
+
   const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
-  const [groupsData, setGroupsData] = useState([
-    { name: 'Roommates', memberCount: 4, balance: 85.0, owed: true },
-    { name: 'Trip to NYC', memberCount: 6, balance: 25.5, owed: false },
-    { name: 'Dinner Club', memberCount: 3, balance: 65.0, owed: true },
-  ]);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
 
   const transactionsData = [
     {
@@ -69,16 +67,12 @@ const Dashboard = () => {
     },
   ];
 
-  const handleCreateGroup = (newGroup) => {
-    const { name: groupName } = newGroup;
-    setGroupsData([...groupsData, newGroup]);
+  const handleCreateGroup = () => {
     setShowCreateGroupModal(false);
-    alert(`${groupName} Group Added!`);
   };
 
-  const handleAddExpense = () => {
-    alert('Add expense clicked');
-    // Add your implementation logic here
+  const handleAddExpense = (group) => {
+    setShowExpenseModal(true);
   };
 
   const handleSettleUp = () => {
@@ -107,7 +101,7 @@ const Dashboard = () => {
               subtitle='In the last 30 days'
             />
           </div>
-          <Groups groups={groupsData} />
+          <Groups />
           <RecentActivity transactions={transactionsData} />
         </div>
 
@@ -123,6 +117,11 @@ const Dashboard = () => {
           <CreateGroupModal
             onClose={() => setShowCreateGroupModal(false)}
             onCreateGroup={handleCreateGroup}
+          />
+        )}
+        {showExpenseModal  && (
+          <AddExpenseModal
+            onClose={() => setShowExpenseModal(false)}
           />
         )}
       </div>
