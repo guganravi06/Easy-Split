@@ -4,36 +4,36 @@ import styles from './OutstandingBalances.module.css';
 
 const OutstandingBalances = ({ balances }) => {
   // Helper to get the initial letter from a name
-  const getInitial = (name) => {
-    return name.charAt(0).toUpperCase();
-  };
+  const getInitial = (name) => (name ? name[0].toUpperCase() : '?');
+
+  if (!balances || balances.length === 0) {
+    return <div className={styles.empty}>No outstanding balances!</div>;
+  }
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Outstanding Balances</h2>
-
-      {balances.map((balance, index) => (
-        <div key={index} className={styles.balanceCard}>
-          <div
-            className={styles.userAvatar}
-            style={{ backgroundColor: balance.color || ' #4a8f7b' }}
-          >
-            {balance.initial || getInitial(balance.name)}
-          </div>
-
-          <div className={styles.balanceInfo}>
-            <div className={styles.userName}>{balance.name}</div>
-            <div
-              className={`${styles.balanceAmount} ${
-                balance.userOwes ? styles.youOwe : styles.owesYou
-              }`}
+      <h3 className={styles.title}>Outstanding Balances</h3>
+      <ul className={styles.list}>
+        {balances.map((balance) => (
+          <li key={balance.id} className={styles.item}>
+            <span
+              className={styles.avatar}
+              style={{ background: balance.color }}
             >
-              {balance.userOwes ? 'You owe' : 'Owes you'} $
-              {balance.amount.toFixed(2)}
-            </div>
-          </div>
-        </div>
-      ))}
+              {getInitial(balance.name)}
+            </span>
+            <span className={styles.name}>{balance.name}</span>
+            <span
+              className={
+                balance.userOwes ? styles.negative : styles.positive
+              }
+            >
+              ₹{balance.amount.toFixed(2)}{' '}
+              {balance.userOwes ? 'You owe' : 'You are owed'}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
