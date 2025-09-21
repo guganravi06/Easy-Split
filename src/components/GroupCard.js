@@ -5,8 +5,9 @@ const GroupCard = ({name,memberCount,balance=0,owed=false}) => {
     const balanceClass = owed 
     ? styles.positiveBalance 
     : styles.negativeBalance;
-  
-  const formattedBalance = `${owed ? '+' : '-'}$${Math.abs(balance).toFixed(2)}`;
+
+  const absBalance = Math.abs(balance); // Remove negative sign
+  const formattedBalance = `${owed ? '+' : '-'}$${absBalance.toFixed(2)}`;
   const statusText = owed ? "You're owed" : "You owe";
   
   return (
